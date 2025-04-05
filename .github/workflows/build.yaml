@@ -1,0 +1,31 @@
+name: Build native executable with Gradle
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '21'
+
+      - name: Build with Gradle
+        run: ./gradlew nativeBinaries
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: native-server
+          path: build/bin/native/releaseExecutable/native-server.kexe
